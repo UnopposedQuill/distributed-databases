@@ -22,6 +22,7 @@ create table EstadoPrestamo(
 create table PrestamoEstudiante(
 	id int primary key identity,
 	idEstudiante int not null,
+	fechaVencimiento date not null,
 	FKLibro int constraint FKPrestamoEstudiante_Libro references Libro(id) not null,
 	FKEstadoPrestamo int constraint FKPrestamoEstudiante_EstadoPrestamo references EstadoPrestamo(id) not null
 );
@@ -29,6 +30,7 @@ create table PrestamoEstudiante(
 create table PrestamoProfesor(
 	id int primary key identity,
 	idProfesor int not null,
+	fechaVencimiento date not null,
 	FKLibro int constraint FKPrestamoProfesor_Libro references Libro(id) not null,
 	FKEstadoPrestamo int constraint FKPrestamoProfesor_EstadoPrestamo references EstadoPrestamo(id) not null
 );
