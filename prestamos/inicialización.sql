@@ -1,4 +1,4 @@
-use Espaciales
+use Prestamos
 go
 
 insert into TipoEstablecimiento(descripcion) values

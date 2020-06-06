@@ -1,4 +1,4 @@
-use Espaciales
+use Hr
 go
 
 insert into TipoEstablecimiento(descripcion) values

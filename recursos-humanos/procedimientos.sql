@@ -1,5 +1,5 @@
 
-use Espaciales
+use Hr
 go
 
 -- Procedimiento 1

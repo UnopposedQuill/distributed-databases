@@ -1,11 +1,11 @@
 
 -- para la creación de la base de datos
 /*
-create database Espaciales
+create database Hr
 go
 */
 
-use Espaciales
+use Hr
 go
 
 -- Primero las tablas sin referencias

@@ -13,12 +13,14 @@ create table morosidad_estudiante(
 	id int primary key auto_increment,
     idEstudiante int not null,
     idEstadoMorosidad int not null,
+    valor int not null,
     foreign key (idEstadoMorosidad) references estado_morosidad(id)
 );
 
-create table MorosidadProfesor(
+create table morosidad_profesor(
 	id int primary key auto_increment,
     idProfesor int not null,
     idEstadoMorosidad int not null,
+	valor int not null,
     foreign key (idEstadoMorosidad) references estado_morosidad(id)
 );

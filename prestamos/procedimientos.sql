@@ -1,5 +1,5 @@
 
-use Espaciales
+use Prestamos
 go
 
 -- Procedimiento 1

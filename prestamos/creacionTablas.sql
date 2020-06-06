@@ -1,11 +1,11 @@
 
 -- para la creación de la base de datos
 /*
-create database Espaciales
+create database Prestamos
 go
 */
 
-use Espaciales
+use Prestamos
 go
 
 -- Primero las tablas sin referencias
