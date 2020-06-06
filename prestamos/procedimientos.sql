@@ -32,10 +32,9 @@ as begin
 end
 go
 
-exec consultarPrestamosVencidos;
-go
-
-create or alter procedure prestamoLibro @idEstudiante int, @idLibro int, @fechaVencimiento date = null
+-- Mecanismo para prestar un libro a un estudiante, decidé separarlos por motivos de que los profesores tienen
+-- detalles por debajo
+create or alter procedure prestamoLibroEstudiante @idEstudiante int, @idLibro int, @fechaVencimiento date = null
 as begin
 	-- Primero revisar si es un estudiante activo
 	declare @estudiante int = 0;-- la cantidad de estudiantes activos que poseen el mismo id
@@ -78,6 +77,54 @@ as begin
 	insert into PrestamoEstudiante(idEstudiante, FKLibro, FKEstadoPrestamo, fechaVencimiento) values
 		(@idEstudiante, @idLibro, 2, isnull(@fechaVencimiento,DATEADD(month, 1, GETDATE())));
 end
+go
+
+-- mecanismo para prestar un libro a un profesor
+create or alter procedure prestamoLibroProfesor @idProfesor int, @idLibro int, @fechaVencimiento date = null
+as begin
+	-- Primero revisar si es un estudiante activo
+	declare @profesor int = 0;-- la cantidad de Profesores activos que poseen el mismo id
+	select @profesor = count(id) from [Hr].dbo.[Profesor] P -- debido a que son bases homogéneas puedo usar este anclaje, es posible agregarlo como Linked Database
+		where id = @idProfesor;
+	if @profesor <= 0
+	begin
+		select 'Profesor no activo o inexistente';
+		return; -- profesor no activo o no existe, termina
+	end
+
+	-- Existe el libro?
+	if (select count(L.id) from Libro L where L.id = @idLibro) = 0
+	begin
+		select 'Libro inexistente';
+		return; -- libro no existente
+	end
+
+	-- Revisar si es un moroso
+	declare @deudas int = 0;-- la cantidad de deudas activas que poseen el mismo id de estudiante
+	select @deudas = count(idProfesor) from openquery(MYSQL, 'select me.idProfesor from financiero.morosidad_profesor me where me.idEstadoMorosidad <> 1;')
+		where idProfesor = @idProfesor;
+	if @deudas > 0
+	begin
+		select 'Profesor Moroso';
+		return; -- deudas no pagadas: moroso
+	end
+
+	-- Revisar si tiene préstamos vencidos
+	if (select count(PP.id) from PrestamoProfesor PP 
+		where PP.idProfesor = @idProfesor and
+		GETDATE() > PP.fechaVencimiento and PP.FKEstadoPrestamo = 2
+		) > 0
+	begin
+		select 'Profesor con préstamos vencidos';
+		return; -- tiene préstamos vencidos
+	end
+
+	-- Todo está correcto, insertar
+	insert into PrestamoProfesor(idProfesor, FKLibro, FKEstadoPrestamo, fechaVencimiento) values
+		(@idProfesor, @idLibro, 2, isnull(@fechaVencimiento,DATEADD(month, 1, GETDATE())));
+end
+go
+
 
 --select * from openquery(MYSQL, 'select e.id from estudiantes.estudiante e;');
 
