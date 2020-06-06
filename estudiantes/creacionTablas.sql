@@ -10,6 +10,7 @@ create table estudiante(
     activo bit not null default 1
 );
 
+-- ahora las que sí poseen FK
 create table grupo(
 	id int primary key auto_increment,
     capacidad int not null,

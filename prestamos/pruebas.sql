@@ -10,4 +10,6 @@ exec consultarPrestamosVencidos--vencidos
 
 exec prestamoLibro 1, null, null --libro inexistente
 exec prestamoLibro 3, 1, null --estudiante no activo o inexistente (no activo en este caso)
+exec prestamoLibro 2, 1, null --estudiante moroso con deudas vencidas
+exec prestamoLibro 5, 1, null --estudiante moroso con préstamos vencidos
 exec prestamoLibro 1, 1, null --estudiante moroso

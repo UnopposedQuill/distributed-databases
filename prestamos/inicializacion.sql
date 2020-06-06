@@ -12,4 +12,6 @@ insert into Libro(titulo, ibsn) values
 insert into PrestamoEstudiante(idEstudiante, FKLibro, FKEstadoPrestamo, fechaVencimiento) values
 	(1, 1, 1, '2020-06-07'),
 	(1, 1, 1, '2020-06-04'),
-	(1, 1, 2, '2019-06-04');
+	(1, 1, 2, '2019-06-04'),
+	(2, 1, 2, '2019-06-04'),
+	(5, 1, 2, '2019-06-04');
