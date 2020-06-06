@@ -1,4 +1,6 @@
 
+use financiero;
+
 /*
 En mySQL si el procedimiento posee instrucciones que deben estar delimitadas tengo que 
 cambiar el delimitador

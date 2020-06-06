@@ -1,10 +1,24 @@
 
+use estudiantes;
+
 /*
 En mySQL si el procedimiento posee instrucciones que deben estar delimitadas tengo que 
 cambiar el delimitador
 */
 delimiter //
 
+-- Necesito un SP que me indique si un estudiante existe, y está activo.
+create procedure is_activo(idEstudiante int)
+begin
+	select count(e.id) from estudiante e
+    where e.id = idEstudiante and
+    e.activo = 1;
+end//
+
+delimiter ;
+
+call is_activo(1);
+call is_activo(3);
 /* 
 4: Realice un procedimiento que obtenga los montos recaudados por tipo de carro
 y tipo de rango de tarifa en un rango de fechas dada.
