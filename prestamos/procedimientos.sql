@@ -13,10 +13,9 @@ go
 create or alter procedure consultarPrestamos @estadoPrestamo int
 as begin
 	select PE.idEstudiante, PE.FKLibro, PE.FKEstadoPrestamo, PE.fechaVencimiento from PrestamoEstudiante PE
-	where (@estadoPrestamo is null or PE.FKEstadoPrestamo = @estadoPrestamo)
-	union
-	select PP.id, PP.FKLibro, PP.FKEstadoPrestamo, PP.fechaVencimiento from PrestamoProfesor PP
-	where (@estadoPrestamo is null or PP.FKEstadoPrestamo = @estadoPrestamo)
+	where (@estadoPrestamo is null or PE.FKEstadoPrestamo = @estadoPrestamo);
+	select PP.idProfesor, PP.FKLibro, PP.FKEstadoPrestamo, PP.fechaVencimiento from PrestamoProfesor PP
+	where (@estadoPrestamo is null or PP.FKEstadoPrestamo = @estadoPrestamo);
 end
 go
 
@@ -24,11 +23,9 @@ go
 create or alter procedure consultarPrestamosVencidos
 as begin
 	select PE.idEstudiante, PE.FKLibro, PE.FKEstadoPrestamo, PE.fechaVencimiento from PrestamoEstudiante PE
-	where GETDATE() > PE.fechaVencimiento and PE.FKEstadoPrestamo = 2
-	union
-	select PP.id, PP.FKLibro, PP.FKEstadoPrestamo, PP.fechaVencimiento from PrestamoProfesor PP
-	where GETDATE() > PP.fechaVencimiento and PP.FKEstadoPrestamo = 2
-	
+	where GETDATE() > PE.fechaVencimiento and PE.FKEstadoPrestamo = 2;
+	select PP.idProfesor, PP.FKLibro, PP.FKEstadoPrestamo, PP.fechaVencimiento from PrestamoProfesor PP
+	where GETDATE() > PP.fechaVencimiento and PP.FKEstadoPrestamo = 2;
 end
 go
 
