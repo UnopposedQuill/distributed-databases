@@ -2,8 +2,26 @@
 use Prestamos
 go
 
--- Procedimiento 1
+create or alter procedure 
+select * from openquery(MYSQL, 'select count(e.id) from estudiantes.estudiante e;');
 
+/*
+declare @returnValue int;
+exec ('call estudiantes.is_activo',3, @returnValue output) at MYSQL;
+select @returnValue
+*/
+
+/*
+declare @status int;
+set @status = 0;
+
+exec ('call estudiantes.is_activo(?, ?)', @status output, 3) at MYSQL;
+select @status as statusCheck
+*/
+
+--exec ('call estudiantes.is_activo(?)', 3) at MYSQL;
+
+/*
 create or alter procedure distanciaCasas @idCasa1 int, @idCasa2 int
 as
 begin
@@ -44,3 +62,4 @@ end
 go
 
 exec comercioMasCercano 2, 3
+*/
