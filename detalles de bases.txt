@@ -1,0 +1,5 @@
+Prestamos:		SQL Server
+Recursos Humanos:	SQL Server
+Financiero:		MySQL
+Estudiantes:		MySQL
+
