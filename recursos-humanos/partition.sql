@@ -1,0 +1,41 @@
+USE [Hr]
+GO
+BEGIN TRANSACTION
+CREATE PARTITION FUNCTION [plazaFunction](varchar(50)) AS RANGE LEFT FOR VALUES (N'''Cartago''')
+
+
+CREATE PARTITION SCHEME [schemePlaza] AS PARTITION [plazaFunction] TO ([PRIMARY], [Secondary])
+
+
+ALTER TABLE [dbo].[Diploma] DROP CONSTRAINT [FKDiploma_Profesor]
+
+
+
+ALTER TABLE [dbo].[Profesor] DROP CONSTRAINT [PK__Profesor__3213E83F3627F7FB] WITH ( ONLINE = OFF )
+
+
+ALTER TABLE [dbo].[Profesor] ADD PRIMARY KEY NONCLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+
+SET ANSI_PADDING ON
+
+CREATE CLUSTERED INDEX [ClusteredIndex_on_schemePlaza_637270506091931081] ON [dbo].[Profesor]
+(
+	[plaza]
+)WITH (SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF) ON [schemePlaza]([plaza])
+
+
+DROP INDEX [ClusteredIndex_on_schemePlaza_637270506091931081] ON [dbo].[Profesor]
+
+
+ALTER TABLE [dbo].[Diploma]  WITH CHECK ADD  CONSTRAINT [FKDiploma_Profesor] FOREIGN KEY([FKProfesor])
+REFERENCES [dbo].[Profesor] ([id])
+ALTER TABLE [dbo].[Diploma] CHECK CONSTRAINT [FKDiploma_Profesor]
+
+
+COMMIT TRANSACTION
+
+

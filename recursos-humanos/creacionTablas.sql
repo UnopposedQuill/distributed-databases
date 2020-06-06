@@ -1,9 +1,8 @@
 
 -- para la creación de la base de datos
-/*
 create database Hr
 go
-*/
+
 
 use Hr
 go
