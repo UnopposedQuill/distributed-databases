@@ -43,12 +43,14 @@ as begin
 		where id = @idEstudiante;
 	if @estudiante <= 0
 	begin
+		select 'Estudiante no activo o inexistente';
 		return; -- estudiante no activo o no existe, termina
 	end
 
 	-- Existe el libro?
 	if (select count(L.id) from Libro L where L.id = @idLibro) = 0
 	begin
+		select 'Libro inexistente';
 		return; -- libro no existente
 	end
 
@@ -58,6 +60,7 @@ as begin
 		where idEstudiante = @idEstudiante;
 	if @deudas > 0
 	begin
+		select 'Estudiante Moroso';
 		return; -- deudas no pagadas: moroso
 	end
 
@@ -67,22 +70,16 @@ as begin
 		GETDATE() > PE.fechaVencimiento and PE.FKEstadoPrestamo = 2
 		) > 0
 	begin
+		select 'Estudiante con préstamos vencidos';
 		return; -- tiene préstamos vencidos
 	end
 
 	-- Todo está correcto, insertar
 	insert into PrestamoEstudiante(idEstudiante, FKLibro, FKEstadoPrestamo, fechaVencimiento) values
-		(@idEstudiante, @idLibro, 2, DATEADD(month, 1, GETDATE()));
+		(@idEstudiante, @idLibro, 2, isnull(@fechaVencimiento,DATEADD(month, 1, GETDATE())));
 end
 
-exec prestamoLibro 1, null, null
-exec prestamoLibro 3, null, null
 --select * from openquery(MYSQL, 'select e.id from estudiantes.estudiante e;');
-/*
-declare @returnValue int;
-exec ('call estudiantes.is_activo',3, @returnValue output) at MYSQL;
-select @returnValue
-*/
 
 /*
 declare @status int;
@@ -90,49 +87,4 @@ set @status = 0;
 
 exec ('call estudiantes.is_activo(?, ?)', @status output, 3) at MYSQL;
 select @status as statusCheck
-*/
-
---exec ('call estudiantes.is_activo(?)', 3) at MYSQL;
-
-/*
-create or alter procedure distanciaCasas @idCasa1 int, @idCasa2 int
-as
-begin
-	select (select C.ubicacion from Casa C where C.id = @idCasa1).STDistance(
-		(select C.ubicacion from Casa C where C.id = @idCasa2)
-	);
-end
-go
-
-exec distanciaCasas 1, 2 --10
-exec distanciaCasas 1, 4 --40
-exec distanciaCasas 1, null --NULL
-exec distanciaCasas null, null --NULL
-exec distanciaCasas null, 1 --NULL
-go
-
--- Procedimiento 2
-create or alter procedure vecinos @idCasa int, @distanciaCorte int
-as
-begin
-	select C.id, C.ubicacion.ToString() from Casa C
-	where (select C.ubicacion from Casa C where C.id = @idCasa).STDistance(C.ubicacion) < @distanciaCorte
-	and C.id != @idCasa
-end
-go
-
-exec vecinos 1, 50;
-go
-
--- Procedimiento 3
-create or alter procedure comercioMasCercano @idCasa int, @idTipoComercio int
-as
-begin
-	select top(1) E.id from Establecimiento E
-	where E.FKTipoEstablecimiento = @idTipoComercio
-	order by E.ubicacion.STDistance((select C.ubicacion from Casa C where C.id = @idCasa))
-end
-go
-
-exec comercioMasCercano 2, 3
 */
