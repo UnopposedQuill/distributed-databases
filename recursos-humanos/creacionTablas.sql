@@ -9,36 +9,17 @@ use Hr
 go
 
 -- Primero las tablas sin referencias
-create table TipoEstablecimiento(
+create table Profesor(
 	id int primary key identity,
-	descripcion nvarchar(20) not null
-);
-
-create table Avenida(
-	id int primary key identity,
-	ubicacion geometry not null, -- LineString
-	nombre nvarchar(20) not null
+    nombre varchar(50) not null,
+    apellidos varchar(50) not null,
+	plaza varchar(50) not null,
+    activo bit not null default 1
 );
 
 -- Ahora las tablas con referencias
-create table Calle(
+create table Diploma(
 	id int primary key identity,
-	ubicacion geometry not null, -- LineString
-	nombre nvarchar(20) not null,
-	FKAvenida int constraint FKCalle_Avenida references Avenida(id) not null,
-);
-
-create table Establecimiento(
-	id int primary key identity,
-	ubicacion geometry not null, -- Point
-	nombre nvarchar(40) not null,
-	FKCalle int constraint FKEstablecimiento_Calle references Calle(id) not null,
-	FKTipoEstablecimiento int constraint FKTipoEstablecimiento_Establecimiento references TipoEstablecimiento(id) not null,
-);
-
-create table Casa(
-	id int primary key identity,
-	ubicacion geometry not null, -- Point
-	numeroCasa int not null,
-	FKCalle int constraint FKCasa_Calle references Calle(id) not null,
+	descripcion nvarchar(20) not null,
+	FKProfesor int constraint FKDiploma_Profesor references Profesor(id) not null,
 );
