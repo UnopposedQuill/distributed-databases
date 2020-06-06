@@ -85,7 +85,7 @@ as begin
 	-- Primero revisar si es un estudiante activo
 	declare @profesor int = 0;-- la cantidad de Profesores activos que poseen el mismo id
 	select @profesor = count(id) from [Hr].dbo.[Profesor] P -- debido a que son bases homogéneas puedo usar este anclaje, es posible agregarlo como Linked Database
-		where id = @idProfesor;
+		where id = @idProfesor and P.activo = 1;
 	if @profesor <= 0
 	begin
 		select 'Profesor no activo o inexistente';
